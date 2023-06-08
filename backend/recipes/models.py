@@ -32,7 +32,7 @@ class Tag(models.Model):
 
 class Recipe(models.Model):
     name = models.CharField(max_length=200)
-    image = models.ImageField(upload_to='recipes/')
+    image = models.ImageField(upload_to='recipes/images/')
     author = models.ForeignKey(
         User, related_name='recipes',
         on_delete=models.CASCADE
