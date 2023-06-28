@@ -1,13 +1,12 @@
 from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
 
-from .models import User
+from .models import CustomUser, Subscription
 
 
-class UserAdmin(UserAdmin):
+class CustomUserAdmin(admin.ModelAdmin):
     list_display = (
-        'username',
         'id',
+        'username',
         'email',
         'first_name',
         'last_name',
@@ -15,4 +14,5 @@ class UserAdmin(UserAdmin):
     list_filter = ('email', 'first_name')
 
 
-admin.site.register(User)
+admin.site.register(CustomUser, CustomUserAdmin)
+admin.site.register(Subscription)
