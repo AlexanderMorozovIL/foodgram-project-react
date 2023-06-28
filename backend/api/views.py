@@ -241,7 +241,7 @@ class RecipeViewSet(ModelViewSet):
         ingredients_to_buy = IngredientRecipe.objects.filter(
             recipe__in=recipes_in_shopping_cart).values('ingredient').annotate(
                 amount=Sum('amount')
-            )
+                )
 
         shopping_cart_text = ''
         for item in ingredients_to_buy:
