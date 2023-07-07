@@ -1,8 +1,12 @@
 from django.contrib import admin
+from django.contrib.auth import get_user_model
 
-from .models import CustomUser, Subscription
+from .models import Subscription
+
+User = get_user_model()
 
 
+@admin.register(User)
 class CustomUserAdmin(admin.ModelAdmin):
     list_display = (
         'id',
@@ -11,8 +15,13 @@ class CustomUserAdmin(admin.ModelAdmin):
         'first_name',
         'last_name',
     )
+    search_fields = ('email', 'username')
     list_filter = ('email', 'first_name')
 
 
-admin.site.register(CustomUser, CustomUserAdmin)
-admin.site.register(Subscription)
+@admin.register(Subscription)
+class SubscriptionAdmin(admin.ModelAdmin):
+    list_display = (
+        'user',
+        'following'
+    )

@@ -1,13 +1,21 @@
+import os
+import sys
 from pathlib import Path
+
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+SECRET_KEY = os.environ.get('SECRET_KEY', default='django-insecure-ytag#6127!i5a3h_tw1r6j30nao*v$sxawsq7ly24*8td&ynif')
 
-SECRET_KEY = 'django-insecure-ytag#6127!i5a3h_tw1r6j30nao*v$sxawsq7ly24*8td&ynif'
+if SECRET_KEY is None:
+    sys.exit('ERROR: SECRET_KEY не найден в среде окружения.')
 
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 INSTALLED_APPS = [
@@ -17,13 +25,19 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'rest_framework',
     'rest_framework.authtoken',
     'djoser',
     'django_filters',
-    'users.apps.UsersConfig',
+
     'api.apps.ApiConfig',
+    'ingredients.apps.IngredientsConfig',
+    'favorites.apps.FavoritesConfig',
     'recipes.apps.RecipesConfig',
+    'shoppingcarts.apps.ShoppingcartsConfig',
+    'tags.apps.TagsConfig',
+    'users.apps.UsersConfig',
 ]
 
 MIDDLEWARE = [
@@ -58,8 +72,12 @@ WSGI_APPLICATION = 'foodgram.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': os.getenv('DB_ENGINE', default='django.db.backends.postgresql'),
+        'NAME': os.getenv('DB_NAME', default='postgres'),
+        'USER': os.getenv('POSTGRES_USER', default='postgres'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', default='postgres'),
+        'HOST': os.getenv('DB_HOST', default='db'),
+        'PORT': os.getenv('DB_PORT', default=5432)
     }
 }
 
@@ -87,17 +105,15 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.TokenAuthentication',
     ),
-    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 6,
-
+    'DEFAULT_PAGINATION_CLASS': 'api.pagination.CustomPagination',
 }
 
 DJOSER = {
     'HIDE_USERS': False,
     'SERIALIZERS': {
-        'user': 'api.serializers.CustomUserSerializer',
-        'current_user': 'api.serializers.CustomUserSerializer',
-        'user_create': 'api.serializers.CustomUserCreateSerializer',
+        'user': 'api.subusers.serializers.CustomUserSerializer',
+        'current_user': 'api.subusers.serializers.CustomUserSerializer',
+        'user_create': 'api.subusers.serializers.CustomUserCreateSerializer'
     },
     'PERMISSIONS': {
         'user': ['rest_framework.permissions.AllowAny'],
@@ -116,5 +132,9 @@ USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

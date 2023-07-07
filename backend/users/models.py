@@ -1,11 +1,13 @@
 from django.contrib.auth.models import AbstractUser
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
 class CustomUser(AbstractUser):
-    email = models.EmailField(unique=True)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
+    """Модель пользователей с расширенным функционалом."""
+    email = models.EmailField(unique=True, verbose_name='Электронная почта')
+    first_name = models.CharField(max_length=30, verbose_name='Имя')
+    last_name = models.CharField(max_length=30, verbose_name='Фамилия')
 
     USERNAME_FIELD = 'email'
     REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
@@ -17,14 +19,16 @@ class CustomUser(AbstractUser):
     def __str__(self):
         return self.username
 
-    def get_is_subscribed(self, obj):
-        user = self.context['request'].user
-        if user.is_anonymous:
-            return False
-        return Subscription.objects.filter(user=user, following=obj).exists()
+    def clean(self):
+        super().clean()
+        if self.username == 'me':
+            raise ValidationError(
+                "Нельзя использовать 'me' в качестве имени пользователя."
+            )
 
 
 class Subscription(models.Model):
+    """Модель подписок на пользователей."""
     user = models.ForeignKey(
         CustomUser,
         on_delete=models.CASCADE,
