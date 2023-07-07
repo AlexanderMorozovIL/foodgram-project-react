@@ -12,6 +12,7 @@ class IngredientViewSet(ReadOnlyModelViewSet):
     serializer_class = IngredientSerializer
     filter_backends = (DjangoFilterBackend,)
     filterset_fields = ('name',)
+    pagination_class = None
 
     def get_queryset(self):
         name_starts_with = self.request.query_params.get(
