@@ -17,10 +17,8 @@ class Favorite(models.Model):
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        blank=False,
-        null=False,
         verbose_name='Рецепт',
-        related_name='favorite_recipes'
+        related_name='favorite_recipe'
     )
 
     class Meta:
@@ -29,7 +27,7 @@ class Favorite(models.Model):
 
         constraints = [
             models.UniqueConstraint(
-                fields=['recipe', 'user'],
+                fields=['user', 'recipe'],
                 name='unique_favorite'
             )
         ]

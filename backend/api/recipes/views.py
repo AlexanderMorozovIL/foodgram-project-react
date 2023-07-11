@@ -1,6 +1,7 @@
 from django.db.models import Sum
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.permissions import (IsAuthenticated,
@@ -8,16 +9,13 @@ from rest_framework.permissions import (IsAuthenticated,
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
-from django_filters.rest_framework import DjangoFilterBackend
-
 from api.filters import RecipeFilter
 from api.permissions import OwnerOrReadOnly
 from api.utils import generate_shopping_cart_text
 from favorites.models import Favorite
 from recipes.models import IngredientRecipe, Recipe
 from shoppingcarts.models import ShoppingCart
-
-from ..subusers.serializers import ShortRecipeSerializer
+from ..users.serializers import ShortRecipeSerializer
 from .serializers import RecipeCreateSerializer, RecipeSerializer
 
 
@@ -30,7 +28,6 @@ class RecipeViewSet(ModelViewSet):
     def get_serializer_class(self):
         if self.action in ('create', 'partial_update'):
             return RecipeCreateSerializer
-
         return RecipeSerializer
 
     @action(
@@ -65,7 +62,7 @@ class RecipeViewSet(ModelViewSet):
         )
 
     @favorite.mapping.delete
-    def remove_favorute(self, request, pk):
+    def remove_favorite(self, request, pk):
         recipe = get_object_or_404(Recipe, id=pk)
         user = request.user
         if user.is_authenticated:

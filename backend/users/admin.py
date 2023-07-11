@@ -17,6 +17,13 @@ class CustomUserAdmin(admin.ModelAdmin):
     )
     search_fields = ('email', 'username')
     list_filter = ('email', 'first_name')
+    fields = (
+        ("username",),
+        ("email",),
+        ("first_name",),
+        ("last_name",),
+        ("password",),
+    )
 
 
 @admin.register(Subscription)

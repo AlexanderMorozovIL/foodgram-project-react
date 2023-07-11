@@ -4,13 +4,9 @@ volumes:
   static_value:
   media_value:
   postgres_data:
-  redoc:
 
 services:
   frontend:
-    build:
-      context: ../frontend
-      dockerfile: Dockerfile
     image: alexandermorozovil/foodgram-frontend:v1
     volumes:
       - ../frontend/:/app/result_build/
@@ -24,15 +20,11 @@ services:
       - ./.env
 
   backend:
-    build:
-      context: ../backend
-      dockerfile: Dockerfile
     image: alexandermorozovil/foodgram-backend:v1
     restart: always
     volumes:
       - static_value:/app/static/
       - media_value:/app/media/
-      - redoc:/app/api/docs/
     depends_on:
       - db
     env_file:
@@ -46,11 +38,9 @@ services:
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf
       - ../frontend/build:/usr/share/nginx/html/
-      - ../docs/redoc.html:/usr/share/nginx/html/api/docs/redoc.html
-      - ../docs/openapi-schema.yml:/usr/share/nginx/html/api/docs/openapi-schema.yml
+      - ../docs/:/usr/share/nginx/html/api/docs/
       - static_value:/var/html/static/
       - media_value:/var/html/media/
-      - redoc:/usr/share/nginx/html/api/docs/
     depends_on:
       - backend
     restart: always

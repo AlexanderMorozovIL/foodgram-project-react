@@ -55,6 +55,10 @@ class Subscription(models.Model):
             ),
         )
 
+    def clean(self):
+        if self.user == self.following:
+            raise ValidationError("Нельзя подписаться на самого себя")
+
     def __str__(self):
         return (
             f"{self.user.first_name} {self.user.last_name} подписался на "
