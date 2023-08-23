@@ -1,5 +1,11 @@
 # Foodgram «Продуктовый помощник»
 
+![Python](https://img.shields.io/badge/Python-3.7.0-blue?style=for-the-badge&logo=python&logoColor=yellow)
+![Django](https://img.shields.io/badge/Django-3.2-red?style=for-the-badge&logo=django&logoColor=blue)
+![Postgres](https://img.shields.io/badge/Postgres-13.0-blueviolet?style=for-the-badge&logo=postgresql&logoColor=yellow)
+![Nginx](https://img.shields.io/badge/NGINX-1.19.3-orange?style=for-the-badge&logo=nginx&logoColor=green)
+![Gunicorn](https://img.shields.io/badge/Gunicorn-20.1.0-inactive?style=for-the-badge&logo=gunicorn&logoColor=white)
+
 Онлайн-сервис, позволяющим пользователям публиковать рецепты, подписываться на публикации других пользователей, добавлять понравившиеся рецепты в список «Избранное», а перед походом в магазин скачивать сводный список продуктов, необходимых для приготовления одного или нескольких выбранных блюд.
 
 Полный список запросов и эндпоинтов описан в документации ReDoc, доступна после запуска проекта по адресу:
